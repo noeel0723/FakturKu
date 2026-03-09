@@ -1,12 +1,12 @@
 <?php
 $isEdit = !empty($invoice['id']);
-$pageTitle = $isEdit ? 'Edit Invoice' : 'Buat Invoice Baru';
+$pageTitle = $isEdit ? 'Edit Invoice' : 'Create New Invoice';
 require BASE_PATH . '/app/views/layouts/header.php';
 ?>
 
 <div class="page-header">
     <h1><i class="bi bi-receipt me-2"></i><?= $pageTitle ?></h1>
-    <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
+    <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
 </div>
 
 <form method="POST" action="<?= APP_URL ?>/invoices/<?= $isEdit ? 'update/'.$invoice['id'] : 'store' ?>" id="invoiceForm">
@@ -14,13 +14,13 @@ require BASE_PATH . '/app/views/layouts/header.php';
     <!-- Left: Invoice details -->
     <div class="col-md-8">
         <div class="card mb-3">
-            <div class="card-header py-3">Detail Invoice</div>
+            <div class="card-header py-3">Invoice Details</div>
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Klien <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">Client <span class="text-danger">*</span></label>
                         <select name="client_id" class="form-select" required>
-                            <option value="">-- Pilih Klien --</option>
+                            <option value="">-- Select Client --</option>
                             <?php foreach ($clients as $c): ?>
                             <option value="<?= $c['id'] ?>" <?= ($invoice['client_id'] ?? '') == $c['id'] ? 'selected' : '' ?>>
                                 <?= e($c['name']) ?> <?= $c['company'] ? '(' . e($c['company']) . ')' : '' ?>
@@ -29,7 +29,7 @@ require BASE_PATH . '/app/views/layouts/header.php';
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Mata Uang</label>
+                        <label class="form-label fw-semibold">Currency</label>
                         <select name="currency" class="form-select" id="invoiceCurrency">
                             <?php foreach ($currencies as $cur): ?>
                             <option value="<?= e($cur['code']) ?>" <?= ($invoice['currency'] ?? BASE_CURRENCY) === $cur['code'] ? 'selected' : '' ?>>
@@ -48,11 +48,11 @@ require BASE_PATH . '/app/views/layouts/header.php';
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Tanggal Invoice</label>
+                        <label class="form-label fw-semibold">Issue Date</label>
                         <input type="date" name="issue_date" class="form-control" value="<?= e($invoice['issue_date'] ?? date('Y-m-d')) ?>">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Jatuh Tempo</label>
+                        <label class="form-label fw-semibold">Due Date</label>
                         <input type="date" name="due_date" class="form-control" value="<?= e($invoice['due_date'] ?? date('Y-m-d', strtotime('+30 days'))) ?>">
                     </div>
                 </div>
@@ -62,8 +62,8 @@ require BASE_PATH . '/app/views/layouts/header.php';
         <!-- Invoice Items -->
         <div class="card mb-3">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <span>Item Invoice</span>
-                <button type="button" class="btn btn-sm btn-primary" onclick="addItem()"><i class="bi bi-plus-lg me-1"></i>Tambah Item</button>
+                <span>Invoice Items</span>
+                <button type="button" class="btn btn-sm btn-primary" onclick="addItem()"><i class="bi bi-plus-lg me-1"></i>Add Item</button>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -71,11 +71,11 @@ require BASE_PATH . '/app/views/layouts/header.php';
                         <thead>
                             <tr>
                                 <th style="width:200px">Produk</th>
-                                <th>Deskripsi</th>
+                                <th>Description</th>
                                 <th style="width:80px">Qty</th>
-                                <th style="width:70px">Satuan</th>
-                                <th style="width:130px">Harga</th>
-                                <th style="width:130px">Jumlah</th>
+                                <th style="width:70px">Unit</th>
+                                <th style="width:130px">Price</th>
+                                <th style="width:130px">Amount</th>
                                 <th style="width:40px"></th>
                             </tr>
                         </thead>
@@ -88,7 +88,7 @@ require BASE_PATH . '/app/views/layouts/header.php';
                             <tr class="item-row">
                                 <td>
                                     <select name="items[<?= $idx ?>][product_id]" class="form-select form-select-sm product-select" onchange="fillProduct(this, <?= $idx ?>)">
-                                        <option value="">-- Pilih --</option>
+                                        <option value="">-- Select --</option>
                                         <?php foreach ($products as $p): ?>
                                         <option value="<?= $p['id'] ?>" data-price="<?= $p['unit_price'] ?>" data-desc="<?= e($p['name']) ?>" data-unit="<?= e($p['unit']) ?>"
                                             <?= ($it['product_id'] ?? '') == $p['id'] ? 'selected' : '' ?>>
@@ -114,8 +114,8 @@ require BASE_PATH . '/app/views/layouts/header.php';
         <!-- Notes -->
         <div class="card">
             <div class="card-body">
-                <label class="form-label fw-semibold">Catatan</label>
-                <textarea name="notes" class="form-control" rows="3" placeholder="Catatan tambahan untuk klien..."><?= e($invoice['notes'] ?? '') ?></textarea>
+                <label class="form-label fw-semibold">Notes</label>
+                <textarea name="notes" class="form-control" rows="3" placeholder="Additional notes for client..."><?= e($invoice['notes'] ?? '') ?></textarea>
             </div>
         </div>
     </div>
@@ -123,14 +123,14 @@ require BASE_PATH . '/app/views/layouts/header.php';
     <!-- Right: Summary -->
     <div class="col-md-4">
         <div class="card sticky-top" style="top:20px">
-            <div class="card-header py-3">Ringkasan</div>
+            <div class="card-header py-3">Summary</div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label small text-muted">Pajak (%)</label>
+                    <label class="form-label small text-muted">Tax (%)</label>
                     <input type="number" name="tax_rate" class="form-control" id="taxRate" step="0.01" min="0" value="<?= $invoice['tax_rate'] ?? 11 ?>" onchange="calcTotal()">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label small text-muted">Diskon</label>
+                    <label class="form-label small text-muted">Discount</label>
                     <input type="number" name="discount_amount" class="form-control" id="discountAmount" step="0.01" min="0" value="<?= $invoice['discount_amount'] ?? 0 ?>" onchange="calcTotal()">
                 </div>
                 <hr>
@@ -139,11 +139,11 @@ require BASE_PATH . '/app/views/layouts/header.php';
                     <span id="subtotalDisplay" class="fw-semibold">0</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Pajak</span>
+                    <span class="text-muted">Tax</span>
                     <span id="taxDisplay">0</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Diskon</span>
+                    <span class="text-muted">Discount</span>
                     <span id="discountDisplay">-0</span>
                 </div>
                 <hr>
@@ -151,8 +151,8 @@ require BASE_PATH . '/app/views/layouts/header.php';
                     <span class="fw-bold fs-5">TOTAL</span>
                     <span id="totalDisplay" class="fw-bold fs-5 text-primary">0</span>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-1"></i>Simpan Invoice</button>
-                <a href="<?= APP_URL ?>/invoices" class="btn btn-light w-100">Batal</a>
+                <button type="submit" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-1"></i>Save Invoice</button>
+                <a href="<?= APP_URL ?>/invoices" class="btn btn-light w-100">Cancel</a>
             </div>
         </div>
     </div>
@@ -167,7 +167,7 @@ function addItem() {
     const tbody = document.getElementById('itemsBody');
     const tr = document.createElement('tr');
     tr.className = 'item-row';
-    let productOptions = '<option value="">-- Pilih --</option>';
+    let productOptions = '<option value="">-- Select --</option>';
     products.forEach(p => {
         productOptions += `<option value="${p.id}" data-price="${p.price}" data-desc="${p.name}" data-unit="${p.unit}">${p.name}</option>`;
     });
@@ -207,7 +207,7 @@ function calcRow(el) {
     const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
     const price = parseFloat(row.querySelector('.item-price').value) || 0;
     const amount = qty * price;
-    row.querySelector('.item-amount').textContent = amount.toLocaleString('id-ID');
+    row.querySelector('.item-amount').textContent = amount.toLocaleString('en-US');
     calcTotal();
 }
 
@@ -223,10 +223,10 @@ function calcTotal() {
     const tax = subtotal * (taxRate / 100);
     const total = subtotal + tax - discount;
 
-    document.getElementById('subtotalDisplay').textContent = subtotal.toLocaleString('id-ID');
-    document.getElementById('taxDisplay').textContent = tax.toLocaleString('id-ID');
-    document.getElementById('discountDisplay').textContent = '-' + discount.toLocaleString('id-ID');
-    document.getElementById('totalDisplay').textContent = Math.max(0, total).toLocaleString('id-ID');
+    document.getElementById('subtotalDisplay').textContent = subtotal.toLocaleString('en-US');
+    document.getElementById('taxDisplay').textContent = tax.toLocaleString('en-US');
+    document.getElementById('discountDisplay').textContent = '-' + discount.toLocaleString('en-US');
+    document.getElementById('totalDisplay').textContent = Math.max(0, total).toLocaleString('en-US');
 }
 
 // Init calculation

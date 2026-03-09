@@ -1,4 +1,4 @@
-<?php $pageTitle = 'Daftar Invoice'; require BASE_PATH . '/app/views/layouts/header.php'; ?>
+<?php $pageTitle = 'Invoices'; require BASE_PATH . '/app/views/layouts/header.php'; ?>
 
 <?php
 $statusCounts = [
@@ -28,8 +28,34 @@ foreach ($invoices as $item) {
 ?>
 
 <div class="page-header">
-    <h1><i class="bi bi-receipt me-2"></i>Invoice</h1>
-    <a href="<?= APP_URL ?>/invoices/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Buat Invoice</a>
+    <h1><i class="bi bi-receipt me-2"></i>Invoices</h1>
+    <a href="<?= APP_URL ?>/invoices/create" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Create Invoice</a>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body py-3">
+        <form method="GET" action="<?= APP_URL ?>/invoices" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control" placeholder="Search by invoice number or client" value="<?= e($search ?? '') ?>">
+            </div>
+            <div class="col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="paid" <?= ($statusFilter ?? '') === 'paid' ? 'selected' : '' ?>>Paid</option>
+                    <option value="sent" <?= ($statusFilter ?? '') === 'sent' ? 'selected' : '' ?>>Sent</option>
+                    <option value="partially_paid" <?= ($statusFilter ?? '') === 'partially_paid' ? 'selected' : '' ?>>Partially Paid</option>
+                    <option value="unpaid" <?= ($statusFilter ?? '') === 'unpaid' ? 'selected' : '' ?>>Unpaid (Sent + Partial)</option>
+                    <option value="overdue" <?= ($statusFilter ?? '') === 'overdue' ? 'selected' : '' ?>>Overdue</option>
+                    <option value="draft" <?= ($statusFilter ?? '') === 'draft' ? 'selected' : '' ?>>Draft</option>
+                    <option value="cancelled" <?= ($statusFilter ?? '') === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-primary" type="submit"><i class="bi bi-search me-1"></i>Apply</button>
+                <a class="btn btn-outline-secondary" href="<?= APP_URL ?>/invoices">Reset</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card mb-4" style="border-color:#dbe4eb;">
@@ -40,11 +66,11 @@ foreach ($invoices as $item) {
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <div class="fw-bold">Paid</div>
-                            <div class="small text-muted">Jumlah: <?= $statusCounts['paid'] ?></div>
+                            <div class="small text-muted">Count: <?= $statusCounts['paid'] ?></div>
                         </div>
                         <i class="bi bi-check-circle-fill" style="color:#26b896; font-size:22px;"></i>
                     </div>
-                    <div class="small mt-2" style="color:#26b896;">Nilai: <?= format_currency($statusValues['paid'], BASE_CURRENCY) ?></div>
+                    <div class="small mt-2" style="color:#26b896;">Value: <?= format_currency($statusValues['paid'], BASE_CURRENCY) ?></div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -52,11 +78,11 @@ foreach ($invoices as $item) {
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <div class="fw-bold">Unpaid</div>
-                            <div class="small text-muted">Jumlah: <?= $statusCounts['sent'] + $statusCounts['partially_paid'] ?></div>
+                            <div class="small text-muted">Count: <?= $statusCounts['sent'] + $statusCounts['partially_paid'] ?></div>
                         </div>
                         <i class="bi bi-exclamation-circle-fill" style="color:#efb341; font-size:22px;"></i>
                     </div>
-                    <div class="small mt-2" style="color:#b9851d;">Nilai: <?= format_currency($statusValues['sent'] + $statusValues['partially_paid'], BASE_CURRENCY) ?></div>
+                    <div class="small mt-2" style="color:#b9851d;">Value: <?= format_currency($statusValues['sent'] + $statusValues['partially_paid'], BASE_CURRENCY) ?></div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -64,11 +90,11 @@ foreach ($invoices as $item) {
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <div class="fw-bold">Overdue</div>
-                            <div class="small text-muted">Jumlah: <?= $statusCounts['overdue'] ?></div>
+                            <div class="small text-muted">Count: <?= $statusCounts['overdue'] ?></div>
                         </div>
                         <i class="bi bi-bell-fill" style="color:#d26b6b; font-size:22px;"></i>
                     </div>
-                    <div class="small mt-2" style="color:#bb5a5a;">Nilai: <?= format_currency($statusValues['overdue'], BASE_CURRENCY) ?></div>
+                    <div class="small mt-2" style="color:#bb5a5a;">Value: <?= format_currency($statusValues['overdue'], BASE_CURRENCY) ?></div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -76,11 +102,11 @@ foreach ($invoices as $item) {
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <div class="fw-bold">Draft</div>
-                            <div class="small text-muted">Jumlah: <?= $statusCounts['draft'] ?></div>
+                            <div class="small text-muted">Count: <?= $statusCounts['draft'] ?></div>
                         </div>
                         <i class="bi bi-file-earmark-text-fill" style="color:#6d8aa8; font-size:22px;"></i>
                     </div>
-                    <div class="small mt-2" style="color:#5e7f9f;">Nilai: <?= format_currency($statusValues['draft'], BASE_CURRENCY) ?></div>
+                    <div class="small mt-2" style="color:#5e7f9f;">Value: <?= format_currency($statusValues['draft'], BASE_CURRENCY) ?></div>
                 </div>
             </div>
         </div>
@@ -90,11 +116,11 @@ foreach ($invoices as $item) {
 <div class="card">
     <div class="card-header py-2" style="background:#fbfcfd;">
         <div class="d-flex flex-wrap gap-2">
-            <span class="badge text-bg-light border">All (<?= $statusCounts['all'] ?>)</span>
-            <span class="badge text-bg-light border">Paid (<?= $statusCounts['paid'] ?>)</span>
-            <span class="badge text-bg-light border">Unpaid (<?= $statusCounts['sent'] + $statusCounts['partially_paid'] ?>)</span>
-            <span class="badge text-bg-light border">Overdue (<?= $statusCounts['overdue'] ?>)</span>
-            <span class="badge text-bg-light border">Draft (<?= $statusCounts['draft'] ?>)</span>
+            <a class="badge <?= empty($statusFilter) ? 'text-bg-primary' : 'text-bg-light border text-decoration-none text-dark' ?>" href="<?= APP_URL ?>/invoices?search=<?= urlencode($search ?? '') ?>">All (<?= $statusCounts['all'] ?>)</a>
+            <a class="badge <?= ($statusFilter ?? '') === 'paid' ? 'text-bg-success' : 'text-bg-light border text-decoration-none text-dark' ?>" href="<?= APP_URL ?>/invoices?status=paid&search=<?= urlencode($search ?? '') ?>">Paid (<?= $statusCounts['paid'] ?>)</a>
+            <a class="badge <?= ($statusFilter ?? '') === 'unpaid' ? 'text-bg-warning' : 'text-bg-light border text-decoration-none text-dark' ?>" href="<?= APP_URL ?>/invoices?status=unpaid&search=<?= urlencode($search ?? '') ?>">Unpaid (<?= $statusCounts['sent'] + $statusCounts['partially_paid'] ?>)</a>
+            <a class="badge <?= ($statusFilter ?? '') === 'overdue' ? 'text-bg-danger' : 'text-bg-light border text-decoration-none text-dark' ?>" href="<?= APP_URL ?>/invoices?status=overdue&search=<?= urlencode($search ?? '') ?>">Overdue (<?= $statusCounts['overdue'] ?>)</a>
+            <a class="badge <?= ($statusFilter ?? '') === 'draft' ? 'text-bg-secondary' : 'text-bg-light border text-decoration-none text-dark' ?>" href="<?= APP_URL ?>/invoices?status=draft&search=<?= urlencode($search ?? '') ?>">Draft (<?= $statusCounts['draft'] ?>)</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -106,14 +132,14 @@ foreach ($invoices as $item) {
                     <th>Due</th>
                     <th>Currency</th>
                     <th class="text-end">Total</th>
-                    <th class="text-end">Terbayar</th>
+                    <th class="text-end">Paid</th>
                     <th>Status</th>
-                    <th style="width:100px">Aksi</th>
+                    <th style="width:100px">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($invoices)): ?>
-                <tr><td colspan="9" class="text-center text-muted py-4">Belum ada invoice</td></tr>
+                <tr><td colspan="9" class="text-center text-muted py-4">No invoices found.</td></tr>
                 <?php else: ?>
                 <?php foreach ($invoices as $inv): ?>
                 <tr>
@@ -137,7 +163,7 @@ foreach ($invoices as $item) {
                         <span class="badge badge-status <?= $badgeClass ?>"><?= ucfirst(str_replace('_',' ',$inv['status'])) ?></span>
                     </td>
                     <td>
-                        <a href="<?= APP_URL ?>/invoices/show/<?= $inv['id'] ?>" class="btn btn-sm btn-outline-primary" title="Lihat"><i class="bi bi-eye"></i></a>
+                        <a href="<?= APP_URL ?>/invoices/show/<?= $inv['id'] ?>" class="btn btn-sm btn-outline-primary" title="View"><i class="bi bi-eye"></i></a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -11,8 +11,13 @@ class Invoice extends Model {
         $year   = (int) date('Y');
         $month  = (int) date('m');
 
-        // Atomic increment with INSERT ... ON DUPLICATE KEY UPDATE
-        $this->db->beginTransaction();
+        // Atomic increment with INSERT ... ON DUPLICATE KEY UPDATE.
+        // Respect existing transaction to avoid "There is already an active transaction".
+        $ownsTransaction = !$this->db->inTransaction();
+        if ($ownsTransaction) {
+            $this->db->beginTransaction();
+        }
+
         try {
             $stmt = $this->db->prepare("
                 INSERT INTO invoice_sequences (prefix, year, month, last_number)
@@ -28,13 +33,46 @@ class Invoice extends Model {
             $stmt->execute(['prefix' => $prefix, 'year' => $year, 'month' => $month]);
             $num = (int) $stmt->fetchColumn();
 
-            $this->db->commit();
+            if ($ownsTransaction) {
+                $this->db->commit();
+            }
         } catch (\Exception $ex) {
-            $this->db->rollBack();
+            if ($ownsTransaction && $this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
             throw $ex;
         }
 
         return sprintf('%s-%04d/%02d-%04d', $prefix, $year, $month, $num);
+    }
+
+    public function findAllWithClientFiltered(?string $search = null, ?string $status = null): array {
+        $sql = "
+            SELECT i.*, c.name AS client_name
+            FROM invoices i
+            JOIN clients c ON c.id = i.client_id
+            WHERE 1 = 1
+        ";
+        $params = [];
+
+        if (!empty($search)) {
+            $sql .= " AND (i.invoice_number LIKE :search OR c.name LIKE :search)";
+            $params['search'] = '%' . trim($search) . '%';
+        }
+
+        if (!empty($status)) {
+            if ($status === 'unpaid') {
+                $sql .= " AND i.status IN ('sent', 'partially_paid')";
+            } elseif (in_array($status, ['draft', 'sent', 'paid', 'partially_paid', 'overdue', 'cancelled'], true)) {
+                $sql .= " AND i.status = :status";
+                $params['status'] = $status;
+            }
+        }
+
+        $sql .= " ORDER BY i.created_at DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
     }
 
     public function create(array $data): int {

@@ -27,14 +27,14 @@ class ClientController extends Controller {
         ];
 
         if (!$data['name'] || !$data['email']) {
-            $this->setFlash('danger', 'Nama dan email wajib diisi.');
+            $this->setFlash('danger', 'Name and email are required.');
             $this->view('clients/form', ['client' => $data]);
             return;
         }
 
         $this->clientModel->create($data);
         AuditLog::log('client', (int)$this->db->lastInsertId(), 'created', null, $data);
-        $this->setFlash('success', 'Klien berhasil ditambahkan.');
+        $this->setFlash('success', 'Client created successfully.');
         $this->redirect('clients');
     }
 
@@ -54,7 +54,7 @@ class ClientController extends Controller {
         ];
 
         if (!$data['name'] || !$data['email']) {
-            $this->setFlash('danger', 'Nama dan email wajib diisi.');
+            $this->setFlash('danger', 'Name and email are required.');
             $data['id'] = $id;
             $this->view('clients/form', ['client' => $data]);
             return;
@@ -63,7 +63,7 @@ class ClientController extends Controller {
         $old = $this->clientModel->find((int)$id);
         $this->clientModel->update((int)$id, $data);
         AuditLog::log('client', (int)$id, 'updated', $old, $data);
-        $this->setFlash('success', 'Klien berhasil diperbarui.');
+        $this->setFlash('success', 'Client updated successfully.');
         $this->redirect('clients');
     }
 
@@ -71,7 +71,7 @@ class ClientController extends Controller {
         $old = $this->clientModel->find((int)$id);
         $this->clientModel->delete((int)$id);
         AuditLog::log('client', (int)$id, 'deleted', $old, null);
-        $this->setFlash('success', 'Klien berhasil dihapus.');
+        $this->setFlash('success', 'Client deleted successfully.');
         $this->redirect('clients');
     }
 }

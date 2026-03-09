@@ -9,8 +9,14 @@ class InvoiceController extends Controller {
 
     public function index(): void {
         $invoiceModel = new Invoice();
-        $invoices = $invoiceModel->findAllWithClient();
-        $this->view('invoices/index', ['invoices' => $invoices]);
+        $search = trim($_GET['search'] ?? '');
+        $status = trim($_GET['status'] ?? '');
+        $invoices = $invoiceModel->findAllWithClientFiltered($search ?: null, $status ?: null);
+        $this->view('invoices/index', [
+            'invoices' => $invoices,
+            'search' => $search,
+            'statusFilter' => $status,
+        ]);
     }
 
     public function create(): void {
@@ -53,17 +59,17 @@ class InvoiceController extends Controller {
         }
 
         if (!$data['client_id'] || empty($items)) {
-            $this->setFlash('danger', 'Klien dan minimal 1 item wajib diisi.');
+            $this->setFlash('danger', 'Client and at least one invoice item are required.');
             $this->redirect('invoices/create');
             return;
         }
 
         try {
             $invoiceId = $this->invoiceService->createInvoice($data, $items);
-            $this->setFlash('success', 'Invoice berhasil dibuat.');
+            $this->setFlash('success', 'Invoice created successfully.');
             $this->redirect('invoices/show/' . $invoiceId);
         } catch (\Exception $e) {
-            $this->setFlash('danger', 'Gagal membuat invoice: ' . $e->getMessage());
+            $this->setFlash('danger', 'Failed to create invoice: ' . $e->getMessage());
             $this->redirect('invoices/create');
         }
     }
@@ -71,7 +77,7 @@ class InvoiceController extends Controller {
     public function show(string $id): void {
         $invoice = $this->invoiceService->getFullInvoice((int)$id);
         if (!$invoice) {
-            $this->setFlash('danger', 'Invoice tidak ditemukan.');
+            $this->setFlash('danger', 'Invoice not found.');
             $this->redirect('invoices');
             return;
         }
@@ -124,10 +130,10 @@ class InvoiceController extends Controller {
 
         try {
             $this->invoiceService->updateInvoice((int)$id, $data, $items);
-            $this->setFlash('success', 'Invoice berhasil diperbarui.');
+            $this->setFlash('success', 'Invoice updated successfully.');
             $this->redirect('invoices/show/' . $id);
         } catch (\Exception $e) {
-            $this->setFlash('danger', 'Gagal update invoice: ' . $e->getMessage());
+            $this->setFlash('danger', 'Failed to update invoice: ' . $e->getMessage());
             $this->redirect('invoices/edit/' . $id);
         }
     }
@@ -138,9 +144,9 @@ class InvoiceController extends Controller {
         if ($old && in_array($old['status'], ['draft', 'cancelled'])) {
             $invoiceModel->delete((int)$id);
             AuditLog::log('invoice', (int)$id, 'deleted', $old, null);
-            $this->setFlash('success', 'Invoice berhasil dihapus.');
+            $this->setFlash('success', 'Invoice deleted successfully.');
         } else {
-            $this->setFlash('danger', 'Hanya invoice draft/cancelled yang bisa dihapus.');
+            $this->setFlash('danger', 'Only draft/cancelled invoices can be deleted.');
         }
         $this->redirect('invoices');
     }
@@ -148,7 +154,7 @@ class InvoiceController extends Controller {
     public function pdf(string $id): void {
         $invoice = $this->invoiceService->getFullInvoice((int)$id);
         if (!$invoice) {
-            $this->setFlash('danger', 'Invoice tidak ditemukan.');
+            $this->setFlash('danger', 'Invoice not found.');
             $this->redirect('invoices');
             return;
         }
@@ -159,7 +165,7 @@ class InvoiceController extends Controller {
     public function sendEmail(string $id): void {
         $invoice = $this->invoiceService->getFullInvoice((int)$id);
         if (!$invoice) {
-            $this->setFlash('danger', 'Invoice tidak ditemukan.');
+            $this->setFlash('danger', 'Invoice not found.');
             $this->redirect('invoices');
             return;
         }
@@ -171,9 +177,9 @@ class InvoiceController extends Controller {
                 (new Invoice())->update((int)$id, ['status' => 'sent']);
                 AuditLog::log('invoice', (int)$id, 'status_changed', ['status' => 'draft'], ['status' => 'sent']);
             }
-            $this->setFlash('success', 'Invoice berhasil dikirim ke ' . $invoice['client_email']);
+            $this->setFlash('success', 'Invoice email sent to ' . $invoice['client_email']);
         } else {
-            $this->setFlash('danger', 'Gagal mengirim email. Periksa konfigurasi SMTP.');
+            $this->setFlash('danger', 'Failed to send email. Please check SMTP configuration.');
         }
         $this->redirect('invoices/show/' . $id);
     }

@@ -5,9 +5,13 @@
 $pageTitle = $pageTitle ?? APP_NAME;
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
+
+$currentUrl = trim($_GET['url'] ?? '', '/');
+$topbarAction = APP_URL . '/' . ($currentUrl !== '' ? $currentUrl : 'dashboard');
+$topbarSearch = trim($_GET['search'] ?? '');
 ?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -158,17 +162,17 @@ unset($_SESSION['flash']);
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'clients') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/clients">
-                    <i class="bi bi-people"></i> Klien
+                    <i class="bi bi-people"></i> Clients
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'products') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/products">
-                    <i class="bi bi-box-seam"></i> Produk/Jasa
+                    <i class="bi bi-box-seam"></i> Products/Services
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'invoices') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/invoices">
-                    <i class="bi bi-receipt"></i> Invoice
+                    <i class="bi bi-receipt"></i> Invoices
                 </a>
             </li>
         </ul>
@@ -180,9 +184,12 @@ unset($_SESSION['flash']);
             <div class="shell-topbar">
                 <div class="shell-title"><?= e($pageTitle) ?></div>
                 <div class="d-flex align-items-center gap-2 w-100 justify-content-end">
-                    <div class="shell-search">
-                        <input type="text" class="form-control form-control-sm" placeholder="Search..." readonly>
-                    </div>
+                    <form class="shell-search" method="GET" action="<?= e($topbarAction) ?>">
+                        <?php if (!empty($_GET['status'])): ?>
+                        <input type="hidden" name="status" value="<?= e($_GET['status']) ?>">
+                        <?php endif; ?>
+                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Search..." value="<?= e($topbarSearch) ?>">
+                    </form>
                     <button class="btn btn-light btn-sm" type="button"><i class="bi bi-envelope"></i></button>
                     <button class="btn btn-light btn-sm" type="button"><i class="bi bi-bell"></i></button>
                 </div>

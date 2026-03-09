@@ -8,8 +8,8 @@
     <div class="card-body p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-                <h5 class="mb-1" style="font-weight:700; color:#2A384C;">Ringkasan Kinerja Penagihan</h5>
-                <div class="text-muted small">Snapshot real-time dari transaksi dan arus kas invoice.</div>
+                <h5 class="mb-1" style="font-weight:700; color:#2A384C;">Billing Performance Summary</h5>
+                <div class="text-muted small">Real-time snapshot of invoice transactions and cashflow.</div>
             </div>
             <a href="<?= APP_URL ?>/invoices/create" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i>Create Invoice</a>
         </div>
@@ -23,13 +23,13 @@
             </div>
             <div class="col-md-3">
                 <div class="stat-pill h-100">
-                    <div class="small text-muted">Invoice Lunas</div>
+                    <div class="small text-muted">Paid Invoices</div>
                     <div class="fs-3 fw-bold" style="color:#1c8f75;"><?= (int)($stats['paid_count'] ?? 0) ?></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-pill h-100">
-                    <div class="small text-muted">Belum Lunas</div>
+                    <div class="small text-muted">Unpaid Invoices</div>
                     <div class="fs-3 fw-bold" style="color:#b98721;"><?= (int)($stats['unpaid_count'] ?? 0) ?></div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                     <div class="fs-5 fw-bold" style="color:#2A384C;"><?= format_currency((float)($stats['total_revenue'] ?? 0), BASE_CURRENCY) ?></div>
                 </div>
                 <div class="mb-3">
-                    <div class="small text-muted">Revenue Dibayar</div>
+                    <div class="small text-muted">Collected Revenue</div>
                     <div class="fs-6 fw-bold" style="color:#1c8f75;"><?= format_currency((float)($stats['paid_revenue'] ?? 0), BASE_CURRENCY) ?></div>
                 </div>
                 <div class="small text-muted mb-2">Outstanding</div>
@@ -68,7 +68,7 @@
                     ?>
                     <div class="progress-bar" style="width: <?= $outstandingPercent ?>%; background:#A0B2C2;"></div>
                 </div>
-                <div class="small mt-2" style="color:#6f7f8f;"><?= $outstandingPercent ?>% dari total revenue masih outstanding.</div>
+                <div class="small mt-2" style="color:#6f7f8f;"><?= $outstandingPercent ?>% of total revenue is still outstanding.</div>
             </div>
         </div>
     </div>
@@ -77,7 +77,7 @@
         <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h6 class="mb-0">Kesehatan Portofolio</h6>
+                    <h6 class="mb-0">Portfolio Health</h6>
                     <span class="small text-muted">Invoice Mix</span>
                 </div>
                 <?php
@@ -107,14 +107,14 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center p-3 mb-2" style="background:#f4f7fa; border-radius:10px;">
                     <div>
-                        <div class="small text-muted">Client Aktif</div>
+                        <div class="small text-muted">Active Clients</div>
                         <div class="fw-bold" style="font-size:22px;"><?= (int)$clientCount ?></div>
                     </div>
                     <i class="bi bi-people" style="font-size:24px; color:#7d8fa1;"></i>
                 </div>
                 <div class="d-flex justify-content-between align-items-center p-3" style="background:#f4f7fa; border-radius:10px;">
                     <div>
-                        <div class="small text-muted">Produk/Jasa</div>
+                        <div class="small text-muted">Products/Services</div>
                         <div class="fw-bold" style="font-size:22px;"><?= (int)$productCount ?></div>
                     </div>
                     <i class="bi bi-box-seam" style="font-size:24px; color:#7d8fa1;"></i>
@@ -126,23 +126,23 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center py-3">
-        <span><i class="bi bi-receipt me-2"></i>Invoice Terbaru</span>
-        <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-right me-1"></i>Lihat Semua</a>
+        <span><i class="bi bi-receipt me-2"></i>Recent Invoices</span>
+        <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-right me-1"></i>View All</a>
     </div>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>No. Invoice</th>
-                    <th>Klien</th>
+                    <th>Invoice Number</th>
+                    <th>Client</th>
                     <th>Total</th>
                     <th>Status</th>
-                    <th>Jatuh Tempo</th>
+                    <th>Due Date</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($recentInvoices)): ?>
-                <tr><td colspan="5" class="text-center text-muted py-4">Belum ada invoice</td></tr>
+                <tr><td colspan="5" class="text-center text-muted py-4">No invoices yet.</td></tr>
                 <?php else: ?>
                 <?php foreach ($recentInvoices as $inv): ?>
                 <tr style="cursor:pointer" onclick="location.href='<?= APP_URL ?>/invoices/show/<?= $inv['id'] ?>'">
