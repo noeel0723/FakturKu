@@ -1,0 +1,5 @@
+.env
+/storage/invoices/*
+!storage/invoices/.gitkeep
+/vendor/
+*.log
