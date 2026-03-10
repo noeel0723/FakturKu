@@ -66,6 +66,14 @@ define('MAIL_PASSWORD', env('MAIL_PASSWORD', ''));
 define('MAIL_FROM', env('MAIL_FROM', 'billing@fakturku.test'));
 define('MAIL_FROM_NAME', env('MAIL_FROM_NAME', 'FakturKu'));
 
+// Lightweight RBAC defaults
+define('DEFAULT_USER_NAME', env('DEFAULT_USER_NAME', 'Owner User'));
+define('DEFAULT_USER_ROLE', env('DEFAULT_USER_ROLE', 'owner'));
+
+// Optional WhatsApp reminder connector
+define('WHATSAPP_ENABLED', env('WHATSAPP_ENABLED', 'false') === 'true');
+define('WHATSAPP_WEBHOOK_URL', env('WHATSAPP_WEBHOOK_URL', ''));
+
 // Invoice prefix
 define('INVOICE_PREFIX', env('INVOICE_PREFIX', 'INV'));
 

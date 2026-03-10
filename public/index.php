@@ -30,6 +30,7 @@ require_once BASE_PATH . '/app/services/InvoiceService.php';
 require_once BASE_PATH . '/app/services/PaymentService.php';
 require_once BASE_PATH . '/app/services/PdfService.php';
 require_once BASE_PATH . '/app/services/MailService.php';
+require_once BASE_PATH . '/app/services/AdvancedOpsService.php';
 
 // Controllers
 require_once BASE_PATH . '/app/controllers/DashboardController.php';
@@ -37,6 +38,7 @@ require_once BASE_PATH . '/app/controllers/ClientController.php';
 require_once BASE_PATH . '/app/controllers/ProductController.php';
 require_once BASE_PATH . '/app/controllers/InvoiceController.php';
 require_once BASE_PATH . '/app/controllers/PaymentController.php';
+require_once BASE_PATH . '/app/controllers/OperationsController.php';
 
 // Start session
 session_start();
@@ -83,5 +85,26 @@ $router->get('payments/success', 'PaymentController', 'success');
 $router->get('payments/cancel', 'PaymentController', 'cancel');
 $router->get('payments/pending', 'PaymentController', 'pending');
 $router->post('payments/record/{id}', 'PaymentController', 'recordManual');
+
+// Operations
+$router->get('ops/aging-report', 'OperationsController', 'agingReport');
+$router->get('ops/reminders', 'OperationsController', 'reminders');
+$router->post('ops/reminders/run', 'OperationsController', 'runReminders');
+$router->get('ops/credit-notes', 'OperationsController', 'creditNotes');
+$router->post('ops/credit-notes/store', 'OperationsController', 'storeCreditNote');
+$router->post('ops/credit-notes/apply/{id}', 'OperationsController', 'applyCreditNote');
+$router->get('ops/recurring', 'OperationsController', 'recurring');
+$router->post('ops/recurring/store', 'OperationsController', 'storeRecurring');
+$router->post('ops/recurring/run', 'OperationsController', 'runRecurring');
+$router->get('ops/quotes', 'OperationsController', 'quotes');
+$router->post('ops/quotes/store', 'OperationsController', 'storeQuote');
+$router->post('ops/quotes/convert/{id}', 'OperationsController', 'convertQuote');
+$router->get('ops/tax-profiles', 'OperationsController', 'taxProfiles');
+$router->post('ops/tax-profiles/store', 'OperationsController', 'storeTaxProfile');
+$router->get('ops/reconciliation', 'OperationsController', 'reconciliation');
+$router->post('ops/attachments/upload', 'OperationsController', 'attachmentsUpload');
+$router->get('ops/exports', 'OperationsController', 'exports');
+$router->get('ops/exports/download', 'OperationsController', 'exportData');
+$router->get('ops/exports/api', 'OperationsController', 'exportApi');
 
 $router->dispatch();

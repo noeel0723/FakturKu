@@ -34,7 +34,7 @@ class PaymentController extends Controller {
 
             $this->json($result);
         } catch (\Exception $e) {
-            $this->setFlash('danger', 'Checkout gagal: ' . $e->getMessage());
+            $this->setFlash('danger', 'Checkout failed: ' . $e->getMessage());
             $this->redirect('invoices/show/' . $invoiceId);
         }
     }
@@ -128,16 +128,16 @@ class PaymentController extends Controller {
         ];
 
         if ($data['amount'] <= 0) {
-            $this->setFlash('danger', 'Jumlah pembayaran harus lebih dari 0.');
+            $this->setFlash('danger', 'Payment amount must be greater than 0.');
             $this->redirect('invoices/show/' . $id);
             return;
         }
 
         try {
             $this->paymentService->recordManualPayment((int)$id, $data);
-            $this->setFlash('success', 'Pembayaran berhasil dicatat.');
+            $this->setFlash('success', 'Payment has been recorded successfully.');
         } catch (\Exception $e) {
-            $this->setFlash('danger', 'Gagal mencatat pembayaran: ' . $e->getMessage());
+            $this->setFlash('danger', 'Failed to record payment: ' . $e->getMessage());
         }
         $this->redirect('invoices/show/' . $id);
     }

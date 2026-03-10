@@ -16,17 +16,17 @@ class MailService {
         // Wrap with email template
         $body = "
         <div style='font-family:Arial,sans-serif;max-width:600px;margin:0 auto;'>
-            <p>Yth. " . e($invoice['client_name']) . ",</p>
-            <p>Berikut terlampir invoice <strong>" . e($invoice['invoice_number']) . "</strong>
-               dengan total <strong>" . format_currency((float)$invoice['total'], $invoice['currency']) . "</strong>,
-               jatuh tempo <strong>" . format_date($invoice['due_date']) . "</strong>.</p>
-            <p>Silakan lakukan pembayaran sebelum tanggal jatuh tempo.</p>
-            <p>Untuk pembayaran online, silakan klik link berikut:<br>
-               <a href='" . APP_URL . "/invoices/show/" . $invoice['id'] . "'>Lihat & Bayar Invoice</a></p>
+                <p>Dear " . e($invoice['client_name']) . ",</p>
+                <p>Please find your invoice <strong>" . e($invoice['invoice_number']) . "</strong>
+                    with total amount <strong>" . format_currency((float)$invoice['total'], $invoice['currency']) . "</strong>,
+                    due on <strong>" . format_date($invoice['due_date']) . "</strong>.</p>
+                <p>Please complete payment before the due date.</p>
+                <p>To pay online, use the following link:<br>
+                    <a href='" . APP_URL . "/invoices/show/" . $invoice['id'] . "'>View & Pay Invoice</a></p>
             <hr>
             {$htmlBody}
             <hr>
-            <p style='font-size:12px;color:#999'>Email ini dikirim otomatis oleh " . e(APP_NAME) . "</p>
+                <p style='font-size:12px;color:#999'>This email was sent automatically by " . e(APP_NAME) . "</p>
         </div>";
 
         // Use PHP mail() or SMTP
@@ -39,6 +39,17 @@ class MailService {
         $headers .= "Content-type: text/html; charset=UTF-8\r\n";
         $headers .= "From: " . MAIL_FROM_NAME . " <" . MAIL_FROM . ">\r\n";
 
+        return mail($to, $subject, $body, $headers);
+    }
+
+    public function sendRawHtml(string $to, string $subject, string $body): bool {
+        if (MAIL_HOST && MAIL_USERNAME) {
+            return $this->sendSmtp($to, $subject, $body);
+        }
+
+        $headers  = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: " . MAIL_FROM_NAME . " <" . MAIL_FROM . ">\r\n";
         return mail($to, $subject, $body, $headers);
     }
 

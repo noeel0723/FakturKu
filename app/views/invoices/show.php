@@ -12,6 +12,7 @@ $statusClass = match($invoice['status']) {
 };
 
 $remaining = max(0, (float)$invoice['total'] - (float)$invoice['amount_paid']);
+$attachments = $attachments ?? [];
 ?>
 
 <div class="page-header">
@@ -247,6 +248,32 @@ $remaining = max(0, (float)$invoice['total'] - (float)$invoice['amount_paid']);
                         <button type="submit" class="btn btn-success btn-sm w-100"><i class="bi bi-check2-circle me-1"></i>Save Payment</button>
                     </form>
                 </div>
+                <?php endif; ?>
+
+                <hr>
+                <h6 class="mb-3">Attachments</h6>
+                <form method="POST" action="<?= APP_URL ?>/ops/attachments/upload" enctype="multipart/form-data" class="mb-3">
+                    <input type="hidden" name="entity_type" value="invoice">
+                    <input type="hidden" name="entity_id" value="<?= (int)$invoice['id'] ?>">
+                    <input type="file" name="attachment" class="form-control form-control-sm mb-2" accept=".pdf,image/png,image/jpeg,image/webp" required>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm w-100">
+                        <i class="bi bi-paperclip me-1"></i>Upload Attachment
+                    </button>
+                </form>
+
+                <?php if (empty($attachments)): ?>
+                <div class="small text-muted">No attachments uploaded yet.</div>
+                <?php else: ?>
+                <ul class="list-group list-group-flush">
+                    <?php foreach ($attachments as $att): ?>
+                    <li class="list-group-item px-0 py-2 d-flex justify-content-between align-items-center">
+                        <div class="small text-truncate" style="max-width:200px;" title="<?= e($att['file_name']) ?>">
+                            <i class="bi bi-file-earmark me-1"></i><?= e($att['file_name']) ?>
+                        </div>
+                        <a href="<?= APP_URL . '/' . ltrim($att['file_path'], '/') ?>" target="_blank" class="btn btn-sm btn-light border">View</a>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
                 <?php endif; ?>
             </div>
         </div>

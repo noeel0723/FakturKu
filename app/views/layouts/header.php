@@ -6,9 +6,6 @@ $pageTitle = $pageTitle ?? APP_NAME;
 $flash = $_SESSION['flash'] ?? null;
 unset($_SESSION['flash']);
 
-$currentUrl = trim($_GET['url'] ?? '', '/');
-$topbarAction = APP_URL . '/' . ($currentUrl !== '' ? $currentUrl : 'dashboard');
-$topbarSearch = trim($_GET['search'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,19 +83,13 @@ $topbarSearch = trim($_GET['search'] ?? '');
         }
         .shell-topbar {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
             padding: 14px 18px;
             border-bottom: 1px solid #e6ebef;
             background: rgba(255,255,255,0.8);
         }
         .shell-title { font-weight: 700; font-size: 18px; }
-        .shell-search { max-width: 260px; }
-        .shell-search input {
-            border-radius: 10px;
-            border: 1px solid #dfe6ec;
-            background: #f7f9fb;
-        }
         .shell-content { padding: 22px; }
         .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .page-header h1 { font-size: 28px; font-weight: 700; color: var(--ink); margin: 0; }
@@ -143,10 +134,21 @@ $topbarSearch = trim($_GET['search'] ?? '');
         }
         .text-muted { color: var(--muted) !important; }
         @media (max-width: 992px) {
-            .sidebar { position: static; width: 100%; min-height: auto; }
+            .sidebar { position: static; width: 100%; min-height: auto; padding-bottom: 8px; }
+            .sidebar .brand { padding: 14px 16px; font-size: 20px; }
+            .sidebar .nav { flex-direction: row; flex-wrap: wrap; gap: 4px; padding: 6px 8px 0 8px; }
+            .sidebar .nav-item { width: calc(50% - 4px); }
+            .sidebar .nav-link { margin-right: 0; border-left: none; border-radius: 8px; }
             .main-content { margin-left: 0; padding: 14px; }
-            .shell-topbar { flex-direction: column; align-items: start; gap: 10px; }
-            .shell-search { width: 100%; max-width: 100%; }
+            .shell-topbar { padding: 12px 14px; }
+            .shell-content { padding: 14px; }
+            .page-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .table { font-size: 13px; }
+        }
+
+        @media (max-width: 576px) {
+            .sidebar .nav-item { width: 100%; }
+            .card { border-radius: 12px; }
         }
     </style>
 </head>
@@ -175,6 +177,46 @@ $topbarSearch = trim($_GET['search'] ?? '');
                     <i class="bi bi-receipt"></i> Invoices
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/quotes') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/quotes">
+                    <i class="bi bi-file-earmark-text"></i> Quotes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/recurring') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/recurring">
+                    <i class="bi bi-arrow-repeat"></i> Recurring
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/credit-notes') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/credit-notes">
+                    <i class="bi bi-receipt-cutoff"></i> Credit Notes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/aging-report') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/aging-report">
+                    <i class="bi bi-bar-chart-line"></i> Aging Report
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/reminders') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/reminders">
+                    <i class="bi bi-bell"></i> Reminders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/tax-profiles') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/tax-profiles">
+                    <i class="bi bi-percent"></i> Tax Profiles
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/reconciliation') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/reconciliation">
+                    <i class="bi bi-shield-check"></i> Reconciliation
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/exports') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/exports">
+                    <i class="bi bi-download"></i> Export Center
+                </a>
+            </li>
         </ul>
     </nav>
 
@@ -183,16 +225,6 @@ $topbarSearch = trim($_GET['search'] ?? '');
         <div class="shell">
             <div class="shell-topbar">
                 <div class="shell-title"><?= e($pageTitle) ?></div>
-                <div class="d-flex align-items-center gap-2 w-100 justify-content-end">
-                    <form class="shell-search" method="GET" action="<?= e($topbarAction) ?>">
-                        <?php if (!empty($_GET['status'])): ?>
-                        <input type="hidden" name="status" value="<?= e($_GET['status']) ?>">
-                        <?php endif; ?>
-                        <input type="text" name="search" class="form-control form-control-sm" placeholder="Search..." value="<?= e($topbarSearch) ?>">
-                    </form>
-                    <button class="btn btn-light btn-sm" type="button"><i class="bi bi-envelope"></i></button>
-                    <button class="btn btn-light btn-sm" type="button"><i class="bi bi-bell"></i></button>
-                </div>
             </div>
             <div class="shell-content">
                 <?php if ($flash): ?>

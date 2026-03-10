@@ -70,7 +70,7 @@ require BASE_PATH . '/app/views/layouts/header.php';
                     <table class="table mb-0" id="itemsTable">
                         <thead>
                             <tr>
-                                <th style="width:200px">Produk</th>
+                                <th style="width:200px">Product</th>
                                 <th>Description</th>
                                 <th style="width:80px">Qty</th>
                                 <th style="width:70px">Unit</th>

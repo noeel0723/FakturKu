@@ -82,7 +82,8 @@ class InvoiceController extends Controller {
             return;
         }
         $currencies = (new Currency())->findActive();
-        $this->view('invoices/show', ['invoice' => $invoice, 'currencies' => $currencies]);
+        $attachments = (new AdvancedOpsService())->listAttachments('invoice', (int)$id);
+        $this->view('invoices/show', ['invoice' => $invoice, 'currencies' => $currencies, 'attachments' => $attachments]);
     }
 
     public function edit(string $id): void {
