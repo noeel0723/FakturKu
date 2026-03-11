@@ -1,39 +1,39 @@
 <?php
-$pageTitle = 'Reminder Engine';
+$pageTitle = 'Mesin Pengingat';
 require BASE_PATH . '/app/views/layouts/header.php';
 ?>
 
 <div class="page-header">
-    <h1><i class="bi bi-bell me-2"></i>Reminder Engine</h1>
+    <h1><i class="bi bi-bell me-2"></i>Mesin Pengingat</h1>
     <form method="POST" action="<?= APP_URL ?>/ops/reminders/run" class="d-inline">
-        <button class="btn btn-primary"><i class="bi bi-play-circle me-1"></i>Run Reminder Job</button>
+        <button class="btn btn-primary"><i class="bi bi-play-circle me-1"></i>Jalankan Job Pengingat</button>
     </form>
 </div>
 
 <div class="card mb-3">
     <div class="card-body">
-        <p class="mb-0 text-muted">Current rule set: send at D-7, D-1, and D+3 from due date for unpaid invoices. Email runs automatically in this job and WhatsApp logging runs when enabled.</p>
+        <p class="mb-0 text-muted">Set aturan saat ini: kirim pada D-7, D-1, dan D+3 dari tanggal jatuh tempo untuk faktur belum dibayar. Email berjalan otomatis di job ini dan log WhatsApp berjalan jika diaktifkan.</p>
     </div>
 </div>
 
 <div class="card">
-    <div class="card-header py-3">Reminder Logs</div>
+    <div class="card-header py-3">Log Pengingat</div>
     <div class="table-responsive">
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th>Time</th>
-                    <th>Invoice</th>
-                    <th>Client</th>
+                    <th>Waktu</th>
+                    <th>Faktur</th>
+                    <th>Klien</th>
                     <th>Channel</th>
-                    <th>Type</th>
+                    <th>Tipe</th>
                     <th>Status</th>
-                    <th>Response</th>
+                    <th>Respons</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($logs)): ?>
-                <tr><td colspan="7" class="text-center text-muted py-4">No reminder logs yet.</td></tr>
+                <tr><td colspan="7" class="text-center text-muted py-4">Belum ada log pengingat.</td></tr>
                 <?php else: ?>
                 <?php foreach ($logs as $log): ?>
                 <tr>

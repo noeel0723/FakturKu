@@ -1,26 +1,26 @@
 <?php
-$pageTitle = 'Reconciliation Dashboard';
+$pageTitle = 'Dashboard Rekonsiliasi';
 require BASE_PATH . '/app/views/layouts/header.php';
 ?>
 
 <div class="page-header">
-    <h1><i class="bi bi-shield-check me-2"></i>Reconciliation Dashboard</h1>
+    <h1><i class="bi bi-shield-check me-2"></i>Dashboard Rekonsiliasi</h1>
 </div>
 
 <div class="card mb-3">
-    <div class="card-header py-3">Gateway Summary (Success Transactions)</div>
+    <div class="card-header py-3">Ringkasan Gateway (Transaksi Berhasil)</div>
     <div class="table-responsive">
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th>Provider</th>
-                    <th>Transaction Count</th>
-                    <th class="text-end">Total in <?= e(BASE_CURRENCY) ?></th>
+                    <th>Penyedia</th>
+                    <th>Jumlah Transaksi</th>
+                    <th class="text-end">Total dalam <?= e(BASE_CURRENCY) ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($summary)): ?>
-                <tr><td colspan="3" class="text-center text-muted py-4">No paid transactions yet.</td></tr>
+                <tr><td colspan="3" class="text-center text-muted py-4">Belum ada transaksi berhasil.</td></tr>
                 <?php else: ?>
                 <?php foreach ($summary as $row): ?>
                 <tr>
@@ -36,20 +36,20 @@ require BASE_PATH . '/app/views/layouts/header.php';
 </div>
 
 <div class="card">
-    <div class="card-header py-3">Invoice Variance (Potential Mismatch)</div>
+    <div class="card-header py-3">Selisih Faktur (Potensi Ketidaksesuaian)</div>
     <div class="table-responsive">
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th>Invoice</th>
-                    <th class="text-end">Invoice Total (Base)</th>
-                    <th class="text-end">Paid (Base)</th>
-                    <th class="text-end">Variance</th>
+                    <th>Faktur</th>
+                    <th class="text-end">Total Faktur (Dasar)</th>
+                    <th class="text-end">Dibayar (Dasar)</th>
+                    <th class="text-end">Selisih</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($mismatches)): ?>
-                <tr><td colspan="4" class="text-center text-muted py-4">No mismatch detected.</td></tr>
+                <tr><td colspan="4" class="text-center text-muted py-4">Tidak ada ketidaksesuaian terdeteksi.</td></tr>
                 <?php else: ?>
                 <?php foreach ($mismatches as $mis): ?>
                 <tr>

@@ -1,62 +1,62 @@
 <?php
-$pageTitle = 'Credit Notes';
+$pageTitle = 'Nota Kredit';
 require BASE_PATH . '/app/views/layouts/header.php';
 ?>
 
 <div class="page-header">
-    <h1><i class="bi bi-receipt-cutoff me-2"></i>Credit Notes</h1>
+    <h1><i class="bi bi-receipt-cutoff me-2"></i>Nota Kredit</h1>
 </div>
 
 <div class="card mb-3">
-    <div class="card-header py-3">Create Credit Note</div>
+    <div class="card-header py-3">Buat Nota Kredit</div>
     <div class="card-body">
         <form method="POST" action="<?= APP_URL ?>/ops/credit-notes/store" class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Invoice</label>
+                <label class="form-label">Faktur</label>
                 <select name="invoice_id" class="form-select" required>
-                    <option value="">Select invoice</option>
+                    <option value="">Pilih faktur</option>
                     <?php foreach ($invoices as $inv): ?>
                     <option value="<?= (int)$inv['id'] ?>"><?= e($inv['invoice_number']) ?> - <?= e($inv['client_name']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Amount</label>
+                <label class="form-label">Jumlah</label>
                 <input type="number" name="amount" class="form-control" min="0.01" step="0.01" required>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Issued At</label>
+                <label class="form-label">Diterbitkan Pada</label>
                 <input type="date" name="issued_at" class="form-control" value="<?= date('Y-m-d') ?>">
             </div>
             <div class="col-md-3">
-                <label class="form-label">Reason</label>
-                <input type="text" name="reason" class="form-control" placeholder="Adjustment / refund reason">
+                <label class="form-label">Alasan</label>
+                <input type="text" name="reason" class="form-control" placeholder="Alasan penyesuaian / pengembalian">
             </div>
             <div class="col-12">
-                <button class="btn btn-primary">Create Credit Note</button>
+                <button class="btn btn-primary">Buat Nota Kredit</button>
             </div>
         </form>
     </div>
 </div>
 
 <div class="card">
-    <div class="card-header py-3">Credit Note Registry</div>
+    <div class="card-header py-3">Daftar Nota Kredit</div>
     <div class="table-responsive">
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th>Number</th>
-                    <th>Invoice</th>
-                    <th>Client</th>
-                    <th>Issued</th>
-                    <th class="text-end">Amount</th>
+                    <th>Nomor</th>
+                    <th>Faktur</th>
+                    <th>Klien</th>
+                    <th>Diterbitkan</th>
+                    <th class="text-end">Jumlah</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($creditNotes)): ?>
-                <tr><td colspan="7" class="text-center text-muted py-4">No credit notes created yet.</td></tr>
+                <tr><td colspan="7" class="text-center text-muted py-4">Belum ada nota kredit dibuat.</td></tr>
                 <?php else: ?>
                 <?php foreach ($creditNotes as $cn): ?>
                 <tr>
@@ -69,10 +69,10 @@ require BASE_PATH . '/app/views/layouts/header.php';
                     <td>
                         <?php if ($cn['status'] !== 'applied'): ?>
                         <form method="POST" action="<?= APP_URL ?>/ops/credit-notes/apply/<?= (int)$cn['id'] ?>">
-                            <button class="btn btn-sm btn-outline-primary">Apply</button>
+                            <button class="btn btn-sm btn-outline-primary">Terapkan</button>
                         </form>
                         <?php else: ?>
-                        <span class="text-muted small">Applied</span>
+                        <span class="text-muted small">Diterapkan</span>
                         <?php endif; ?>
                     </td>
                 </tr>

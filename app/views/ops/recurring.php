@@ -1,34 +1,34 @@
 <?php
-$pageTitle = 'Recurring Billing';
+$pageTitle = 'Penagihan Berulang';
 require BASE_PATH . '/app/views/layouts/header.php';
 ?>
 
 <div class="page-header">
-    <h1><i class="bi bi-arrow-repeat me-2"></i>Recurring Billing</h1>
+    <h1><i class="bi bi-arrow-repeat me-2"></i>Penagihan Berulang</h1>
     <form method="POST" action="<?= APP_URL ?>/ops/recurring/run">
-        <button class="btn btn-primary"><i class="bi bi-play-circle me-1"></i>Generate Due Invoices</button>
+        <button class="btn btn-primary"><i class="bi bi-play-circle me-1"></i>Generate Faktur Jatuh Tempo</button>
     </form>
 </div>
 
 <div class="card mb-3">
-    <div class="card-header py-3">Create Template</div>
+    <div class="card-header py-3">Buat Template</div>
     <div class="card-body">
         <form method="POST" action="<?= APP_URL ?>/ops/recurring/store" class="row g-3">
             <div class="col-md-3">
-                <label class="form-label">Template Name</label>
+                <label class="form-label">Nama Template</label>
                 <input type="text" name="template_name" class="form-control" required>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Client</label>
+                <label class="form-label">Klien</label>
                 <select name="client_id" class="form-select" required>
-                    <option value="">Select client</option>
+                    <option value="">Pilih klien</option>
                     <?php foreach ($clients as $c): ?>
                     <option value="<?= (int)$c['id'] ?>"><?= e($c['name']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Currency</label>
+                <label class="form-label">Mata Uang</label>
                 <select name="currency" class="form-select">
                     <?php foreach ($currencies as $cur): ?>
                     <option value="<?= e($cur['code']) ?>" <?= $cur['code'] === BASE_CURRENCY ? 'selected' : '' ?>><?= e($cur['code']) ?></option>
@@ -36,49 +36,49 @@ require BASE_PATH . '/app/views/layouts/header.php';
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Frequency</label>
+                <label class="form-label">Frekuensi</label>
                 <select name="frequency" class="form-select">
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly" selected>Monthly</option>
-                    <option value="quarterly">Quarterly</option>
-                    <option value="yearly">Yearly</option>
+                    <option value="weekly">Mingguan</option>
+                    <option value="monthly" selected>Bulanan</option>
+                    <option value="quarterly">Triwulanan</option>
+                    <option value="yearly">Tahunan</option>
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label">Next Issue</label>
+                <label class="form-label">Terbit Berikutnya</label>
                 <input type="date" name="next_issue_date" value="<?= date('Y-m-d') ?>" class="form-control" required>
             </div>
 
             <div class="col-md-3">
-                <label class="form-label">Tax Rate (%)</label>
+                <label class="form-label">Tarif Pajak (%)</label>
                 <input type="number" name="tax_rate" class="form-control" step="0.01" min="0" value="0">
             </div>
             <div class="col-md-3">
-                <label class="form-label">Discount</label>
+                <label class="form-label">Diskon</label>
                 <input type="number" name="discount_amount" class="form-control" step="0.01" min="0" value="0">
             </div>
             <div class="col-md-3">
                 <label class="form-label">Status</label>
                 <select name="status" class="form-select">
-                    <option value="active" selected>Active</option>
-                    <option value="paused">Paused</option>
+                    <option value="active" selected>Aktif</option>
+                    <option value="paused">Dijeda</option>
                 </select>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Notes</label>
-                <input type="text" name="notes" class="form-control" placeholder="Internal note">
+                <label class="form-label">Catatan</label>
+                <input type="text" name="notes" class="form-control" placeholder="Catatan internal">
             </div>
 
             <div class="col-12">
-                <h6 class="mb-2">Line Items</h6>
+                <h6 class="mb-2">Item Baris</h6>
                 <div class="table-responsive">
                     <table class="table table-sm align-middle" id="recurringItemsTable">
                         <thead>
                             <tr>
-                                <th>Description</th>
-                                <th style="width:120px">Qty</th>
-                                <th style="width:130px">Unit</th>
-                                <th style="width:160px">Unit Price</th>
+                                <th>Deskripsi</th>
+                                <th style="width:120px">Jml</th>
+                                <th style="width:130px">Satuan</th>
+                                <th style="width:160px">Harga Satuan</th>
                                 <th style="width:60px"></th>
                             </tr>
                         </thead>
@@ -93,31 +93,31 @@ require BASE_PATH . '/app/views/layouts/header.php';
                         </tbody>
                     </table>
                 </div>
-                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addRecurringRow()">+ Add Row</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="addRecurringRow()">+ Tambah Baris</button>
             </div>
             <div class="col-12">
-                <button class="btn btn-primary">Save Template</button>
+                <button class="btn btn-primary">Simpan Template</button>
             </div>
         </form>
     </div>
 </div>
 
 <div class="card">
-    <div class="card-header py-3">Template List</div>
+    <div class="card-header py-3">Daftar Template</div>
     <div class="table-responsive">
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
                     <th>Template</th>
-                    <th>Client</th>
-                    <th>Frequency</th>
-                    <th>Next Issue</th>
+                    <th>Klien</th>
+                    <th>Frekuensi</th>
+                    <th>Terbit Berikutnya</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($templates)): ?>
-                <tr><td colspan="5" class="text-center text-muted py-4">No recurring template found.</td></tr>
+                <tr><td colspan="5" class="text-center text-muted py-4">Tidak ada template berulang ditemukan.</td></tr>
                 <?php else: ?>
                 <?php foreach ($templates as $t): ?>
                 <tr>

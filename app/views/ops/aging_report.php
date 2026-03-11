@@ -1,13 +1,13 @@
 <?php
-$pageTitle = 'Aging Report';
+$pageTitle = 'Laporan Umur Piutang';
 require BASE_PATH . '/app/views/layouts/header.php';
 ?>
 
 <div class="page-header">
-    <h1><i class="bi bi-bar-chart-line me-2"></i>Aging Report</h1>
+    <h1><i class="bi bi-bar-chart-line me-2"></i>Laporan Umur Piutang</h1>
     <form method="GET" action="<?= APP_URL ?>/ops/aging-report" class="d-flex gap-2">
         <input type="date" class="form-control" name="as_of" value="<?= e($asOfDate) ?>">
-        <button class="btn btn-primary" type="submit">Refresh</button>
+        <button class="btn btn-primary" type="submit">Perbarui</button>
     </form>
 </div>
 
@@ -16,7 +16,7 @@ require BASE_PATH . '/app/views/layouts/header.php';
     <div class="col-md-3 col-6">
         <div class="stat-pill h-100">
             <div class="small text-muted"><?= e($bucket['label']) ?></div>
-            <div class="fw-bold fs-5 mb-1"><?= (int)$bucket['count'] ?> invoices</div>
+            <div class="fw-bold fs-5 mb-1"><?= (int)$bucket['count'] ?> faktur</div>
             <div class="text-muted"><?= format_currency((float)$bucket['amount'], BASE_CURRENCY) ?></div>
         </div>
     </div>
@@ -24,21 +24,21 @@ require BASE_PATH . '/app/views/layouts/header.php';
 </div>
 
 <div class="card">
-    <div class="card-header py-3">Outstanding Invoices as of <?= format_date($asOfDate) ?></div>
+    <div class="card-header py-3">Faktur Belum Dibayar per <?= format_date($asOfDate) ?></div>
     <div class="table-responsive">
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th>Invoice</th>
-                    <th>Client</th>
-                    <th>Due Date</th>
-                    <th>Overdue Days</th>
-                    <th class="text-end">Outstanding</th>
+                    <th>Faktur</th>
+                    <th>Klien</th>
+                    <th>Tanggal Jatuh Tempo</th>
+                    <th>Hari Keterlambatan</th>
+                    <th class="text-end">Belum Dibayar</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($rows)): ?>
-                <tr><td colspan="5" class="text-center text-muted py-4">No outstanding invoices in this period.</td></tr>
+                <tr><td colspan="5" class="text-center text-muted py-4">Tidak ada faktur belum dibayar di periode ini.</td></tr>
                 <?php else: ?>
                 <?php foreach ($rows as $row): ?>
                 <tr>

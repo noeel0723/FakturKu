@@ -1,12 +1,12 @@
 <?php
 $isEdit = !empty($invoice['id']);
-$pageTitle = $isEdit ? 'Edit Invoice' : 'Create New Invoice';
+$pageTitle = $isEdit ? 'Edit Faktur' : 'Buat Faktur Baru';
 require BASE_PATH . '/app/views/layouts/header.php';
 ?>
 
 <div class="page-header">
     <h1><i class="bi bi-receipt me-2"></i><?= $pageTitle ?></h1>
-    <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+    <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Kembali</a>
 </div>
 
 <form method="POST" action="<?= APP_URL ?>/invoices/<?= $isEdit ? 'update/'.$invoice['id'] : 'store' ?>" id="invoiceForm">
@@ -14,13 +14,13 @@ require BASE_PATH . '/app/views/layouts/header.php';
     <!-- Left: Invoice details -->
     <div class="col-md-8">
         <div class="card mb-3">
-            <div class="card-header py-3">Invoice Details</div>
+            <div class="card-header py-3">Detail Faktur</div>
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Client <span class="text-danger">*</span></label>
+                        <label class="form-label fw-semibold">Klien <span class="text-danger">*</span></label>
                         <select name="client_id" class="form-select" required>
-                            <option value="">-- Select Client --</option>
+                            <option value="">-- Pilih Klien --</option>
                             <?php foreach ($clients as $c): ?>
                             <option value="<?= $c['id'] ?>" <?= ($invoice['client_id'] ?? '') == $c['id'] ? 'selected' : '' ?>>
                                 <?= e($c['name']) ?> <?= $c['company'] ? '(' . e($c['company']) . ')' : '' ?>
@@ -29,7 +29,7 @@ require BASE_PATH . '/app/views/layouts/header.php';
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label fw-semibold">Currency</label>
+                        <label class="form-label fw-semibold">Mata Uang</label>
                         <select name="currency" class="form-select" id="invoiceCurrency">
                             <?php foreach ($currencies as $cur): ?>
                             <option value="<?= e($cur['code']) ?>" <?= ($invoice['currency'] ?? BASE_CURRENCY) === $cur['code'] ? 'selected' : '' ?>>
@@ -41,18 +41,18 @@ require BASE_PATH . '/app/views/layouts/header.php';
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Status</label>
                         <select name="status" class="form-select">
-                            <?php $statuses = ['draft'=>'Draft','sent'=>'Sent']; ?>
+                            <?php $statuses = ['draft'=>'Draf','sent'=>'Terkirim']; ?>
                             <?php foreach ($statuses as $val => $label): ?>
                             <option value="<?= $val ?>" <?= ($invoice['status'] ?? 'draft') === $val ? 'selected' : '' ?>><?= $label ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Issue Date</label>
+                        <label class="form-label fw-semibold">Tanggal Terbit</label>
                         <input type="date" name="issue_date" class="form-control" value="<?= e($invoice['issue_date'] ?? date('Y-m-d')) ?>">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label fw-semibold">Due Date</label>
+                        <label class="form-label fw-semibold">Tanggal Jatuh Tempo</label>
                         <input type="date" name="due_date" class="form-control" value="<?= e($invoice['due_date'] ?? date('Y-m-d', strtotime('+30 days'))) ?>">
                     </div>
                 </div>
@@ -62,20 +62,20 @@ require BASE_PATH . '/app/views/layouts/header.php';
         <!-- Invoice Items -->
         <div class="card mb-3">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <span>Invoice Items</span>
-                <button type="button" class="btn btn-sm btn-primary" onclick="addItem()"><i class="bi bi-plus-lg me-1"></i>Add Item</button>
+                <span>Item Faktur</span>
+                <button type="button" class="btn btn-sm btn-primary" onclick="addItem()"><i class="bi bi-plus-lg me-1"></i>Tambah Item</button>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table mb-0" id="itemsTable">
                         <thead>
                             <tr>
-                                <th style="width:200px">Product</th>
-                                <th>Description</th>
-                                <th style="width:80px">Qty</th>
-                                <th style="width:70px">Unit</th>
-                                <th style="width:130px">Price</th>
-                                <th style="width:130px">Amount</th>
+                                <th style="width:200px">Produk</th>
+                                <th>Deskripsi</th>
+                                <th style="width:80px">Jml</th>
+                                <th style="width:70px">Satuan</th>
+                                <th style="width:130px">Harga</th>
+                                <th style="width:130px">Jumlah</th>
                                 <th style="width:40px"></th>
                             </tr>
                         </thead>
@@ -88,7 +88,7 @@ require BASE_PATH . '/app/views/layouts/header.php';
                             <tr class="item-row">
                                 <td>
                                     <select name="items[<?= $idx ?>][product_id]" class="form-select form-select-sm product-select" onchange="fillProduct(this, <?= $idx ?>)">
-                                        <option value="">-- Select --</option>
+                                        <option value="">-- Pilih --</option>
                                         <?php foreach ($products as $p): ?>
                                         <option value="<?= $p['id'] ?>" data-price="<?= $p['unit_price'] ?>" data-desc="<?= e($p['name']) ?>" data-unit="<?= e($p['unit']) ?>"
                                             <?= ($it['product_id'] ?? '') == $p['id'] ? 'selected' : '' ?>>
@@ -114,8 +114,8 @@ require BASE_PATH . '/app/views/layouts/header.php';
         <!-- Notes -->
         <div class="card">
             <div class="card-body">
-                <label class="form-label fw-semibold">Notes</label>
-                <textarea name="notes" class="form-control" rows="3" placeholder="Additional notes for client..."><?= e($invoice['notes'] ?? '') ?></textarea>
+                <label class="form-label fw-semibold">Catatan</label>
+                <textarea name="notes" class="form-control" rows="3" placeholder="Catatan tambahan untuk klien..."><?= e($invoice['notes'] ?? '') ?></textarea>
             </div>
         </div>
     </div>
@@ -123,14 +123,14 @@ require BASE_PATH . '/app/views/layouts/header.php';
     <!-- Right: Summary -->
     <div class="col-md-4">
         <div class="card sticky-top" style="top:20px">
-            <div class="card-header py-3">Summary</div>
+            <div class="card-header py-3">Ringkasan</div>
             <div class="card-body">
                 <div class="mb-3">
-                    <label class="form-label small text-muted">Tax (%)</label>
+                    <label class="form-label small text-muted">Pajak (%)</label>
                     <input type="number" name="tax_rate" class="form-control" id="taxRate" step="0.01" min="0" value="<?= $invoice['tax_rate'] ?? 11 ?>" onchange="calcTotal()">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label small text-muted">Discount</label>
+                    <label class="form-label small text-muted">Diskon</label>
                     <input type="number" name="discount_amount" class="form-control" id="discountAmount" step="0.01" min="0" value="<?= $invoice['discount_amount'] ?? 0 ?>" onchange="calcTotal()">
                 </div>
                 <hr>
@@ -139,11 +139,11 @@ require BASE_PATH . '/app/views/layouts/header.php';
                     <span id="subtotalDisplay" class="fw-semibold">0</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Tax</span>
+                    <span class="text-muted">Pajak</span>
                     <span id="taxDisplay">0</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
-                    <span class="text-muted">Discount</span>
+                    <span class="text-muted">Diskon</span>
                     <span id="discountDisplay">-0</span>
                 </div>
                 <hr>
@@ -151,8 +151,8 @@ require BASE_PATH . '/app/views/layouts/header.php';
                     <span class="fw-bold fs-5">TOTAL</span>
                     <span id="totalDisplay" class="fw-bold fs-5 text-primary">0</span>
                 </div>
-                <button type="submit" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-1"></i>Save Invoice</button>
-                <a href="<?= APP_URL ?>/invoices" class="btn btn-light w-100">Cancel</a>
+                <button type="submit" class="btn btn-primary w-100 mb-2"><i class="bi bi-check-lg me-1"></i>Simpan Faktur</button>
+                <a href="<?= APP_URL ?>/invoices" class="btn btn-light w-100">Batal</a>
             </div>
         </div>
     </div>

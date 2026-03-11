@@ -8,7 +8,7 @@ unset($_SESSION['flash']);
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -164,57 +164,57 @@ unset($_SESSION['flash']);
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'clients') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/clients">
-                    <i class="bi bi-people"></i> Clients
+                    <i class="bi bi-people"></i> Klien
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'products') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/products">
-                    <i class="bi bi-box-seam"></i> Products/Services
+                    <i class="bi bi-box-seam"></i> Produk/Layanan
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'invoices') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/invoices">
-                    <i class="bi bi-receipt"></i> Invoices
+                    <i class="bi bi-receipt"></i> Faktur
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/quotes') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/quotes">
-                    <i class="bi bi-file-earmark-text"></i> Quotes
+                    <i class="bi bi-file-earmark-text"></i> Penawaran
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/recurring') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/recurring">
-                    <i class="bi bi-arrow-repeat"></i> Recurring
+                    <i class="bi bi-arrow-repeat"></i> Berulang
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/credit-notes') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/credit-notes">
-                    <i class="bi bi-receipt-cutoff"></i> Credit Notes
+                    <i class="bi bi-receipt-cutoff"></i> Nota Kredit
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/aging-report') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/aging-report">
-                    <i class="bi bi-bar-chart-line"></i> Aging Report
+                    <i class="bi bi-bar-chart-line"></i> Laporan Umur Piutang
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/reminders') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/reminders">
-                    <i class="bi bi-bell"></i> Reminders
+                    <i class="bi bi-bell"></i> Pengingat
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/tax-profiles') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/tax-profiles">
-                    <i class="bi bi-percent"></i> Tax Profiles
+                    <i class="bi bi-percent"></i> Profil Pajak
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/reconciliation') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/reconciliation">
-                    <i class="bi bi-shield-check"></i> Reconciliation
+                    <i class="bi bi-shield-check"></i> Rekonsiliasi
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link <?= strpos($_GET['url'] ?? '', 'ops/exports') === 0 ? 'active' : '' ?>" href="<?= APP_URL ?>/ops/exports">
-                    <i class="bi bi-download"></i> Export Center
+                    <i class="bi bi-download"></i> Pusat Ekspor
                 </a>
             </li>
         </ul>

@@ -8,34 +8,34 @@
     <div class="card-body p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-                <h5 class="mb-1" style="font-weight:700; color:#2A384C;">Billing Performance Summary</h5>
-                <div class="text-muted small">Real-time snapshot of invoice transactions and cashflow.</div>
+                <h5 class="mb-1" style="font-weight:700; color:#2A384C;">Ringkasan Kinerja Penagihan</h5>
+                <div class="text-muted small">Snapshot real-time transaksi faktur dan arus kas.</div>
             </div>
-            <a href="<?= APP_URL ?>/invoices/create" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i>Create Invoice</a>
+            <a href="<?= APP_URL ?>/invoices/create" class="btn btn-primary btn-sm"><i class="bi bi-plus-circle me-1"></i>Buat Faktur</a>
         </div>
 
         <div class="row g-3">
             <div class="col-md-3">
                 <div class="stat-pill h-100">
-                    <div class="small text-muted">Total Invoice</div>
+                    <div class="small text-muted">Total Faktur</div>
                     <div class="fs-3 fw-bold" style="color:#2A384C;"><?= (int)($stats['total_invoices'] ?? 0) ?></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-pill h-100">
-                    <div class="small text-muted">Paid Invoices</div>
+                    <div class="small text-muted">Faktur Lunas</div>
                     <div class="fs-3 fw-bold" style="color:#1c8f75;"><?= (int)($stats['paid_count'] ?? 0) ?></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-pill h-100">
-                    <div class="small text-muted">Unpaid Invoices</div>
+                    <div class="small text-muted">Faktur Belum Bayar</div>
                     <div class="fs-3 fw-bold" style="color:#b98721;"><?= (int)($stats['unpaid_count'] ?? 0) ?></div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stat-pill h-100">
-                    <div class="small text-muted">Overdue</div>
+                    <div class="small text-muted">Jatuh Tempo</div>
                     <div class="fs-3 fw-bold" style="color:#b95858;"><?= (int)($stats['overdue_count'] ?? 0) ?></div>
                 </div>
             </div>
@@ -48,18 +48,18 @@
         <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h6 class="mb-0">Revenue Snapshot</h6>
-                    <span class="small text-muted">Base <?= BASE_CURRENCY ?></span>
+                    <h6 class="mb-0">Ringkasan Pendapatan</h6>
+                    <span class="small text-muted">Dasar <?= BASE_CURRENCY ?></span>
                 </div>
                 <div class="mb-3">
-                    <div class="small text-muted">Total Revenue</div>
+                    <div class="small text-muted">Total Pendapatan</div>
                     <div class="fs-5 fw-bold" style="color:#2A384C;"><?= format_currency((float)($stats['total_revenue'] ?? 0), BASE_CURRENCY) ?></div>
                 </div>
                 <div class="mb-3">
-                    <div class="small text-muted">Collected Revenue</div>
+                    <div class="small text-muted">Pendapatan Terkumpul</div>
                     <div class="fs-6 fw-bold" style="color:#1c8f75;"><?= format_currency((float)($stats['paid_revenue'] ?? 0), BASE_CURRENCY) ?></div>
                 </div>
-                <div class="small text-muted mb-2">Outstanding</div>
+                <div class="small text-muted mb-2">Belum Dibayar</div>
                 <div class="progress" role="progressbar" style="height:10px; background:#e6edf2;">
                     <?php
                     $totalRevenue = (float)($stats['total_revenue'] ?? 0);
@@ -68,7 +68,7 @@
                     ?>
                     <div class="progress-bar" style="width: <?= $outstandingPercent ?>%; background:#A0B2C2;"></div>
                 </div>
-                <div class="small mt-2" style="color:#6f7f8f;"><?= $outstandingPercent ?>% of total revenue is still outstanding.</div>
+                <div class="small mt-2" style="color:#6f7f8f;"><?= $outstandingPercent ?>% dari total pendapatan masih belum dibayar.</div>
             </div>
         </div>
     </div>
@@ -77,8 +77,8 @@
         <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h6 class="mb-0">Portfolio Health</h6>
-                    <span class="small text-muted">Invoice Mix</span>
+                    <h6 class="mb-0">Kesehatan Portofolio</h6>
+                    <span class="small text-muted">Komposisi Faktur</span>
                 </div>
                 <?php
                 $totalInvoices = max(1, (int)($stats['total_invoices'] ?? 0));
@@ -86,13 +86,13 @@
                 $unpaidPercent = round(((int)($stats['unpaid_count'] ?? 0) / $totalInvoices) * 100);
                 $overduePercent = round(((int)($stats['overdue_count'] ?? 0) / $totalInvoices) * 100);
                 ?>
-                <div class="mb-2 small text-muted">Paid <?= $paidPercent ?>%</div>
+                <div class="mb-2 small text-muted">Lunas <?= $paidPercent ?>%</div>
                 <div class="progress mb-3" style="height:8px; background:#e8edf2;"><div class="progress-bar" style="width: <?= $paidPercent ?>%; background:#26b896;"></div></div>
 
-                <div class="mb-2 small text-muted">Unpaid <?= $unpaidPercent ?>%</div>
+                <div class="mb-2 small text-muted">Belum Bayar <?= $unpaidPercent ?>%</div>
                 <div class="progress mb-3" style="height:8px; background:#e8edf2;"><div class="progress-bar" style="width: <?= $unpaidPercent ?>%; background:#efb341;"></div></div>
 
-                <div class="mb-2 small text-muted">Overdue <?= $overduePercent ?>%</div>
+                <div class="mb-2 small text-muted">Jatuh Tempo <?= $overduePercent ?>%</div>
                 <div class="progress" style="height:8px; background:#e8edf2;"><div class="progress-bar" style="width: <?= $overduePercent ?>%; background:#d26b6b;"></div></div>
             </div>
         </div>
@@ -102,19 +102,19 @@
         <div class="card h-100">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h6 class="mb-0">Resource</h6>
-                    <span class="small text-muted">Master Data</span>
+                    <h6 class="mb-0">Sumber Daya</h6>
+                    <span class="small text-muted">Data Master</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center p-3 mb-2" style="background:#f4f7fa; border-radius:10px;">
                     <div>
-                        <div class="small text-muted">Active Clients</div>
+                        <div class="small text-muted">Klien Aktif</div>
                         <div class="fw-bold" style="font-size:22px;"><?= (int)$clientCount ?></div>
                     </div>
                     <i class="bi bi-people" style="font-size:24px; color:#7d8fa1;"></i>
                 </div>
                 <div class="d-flex justify-content-between align-items-center p-3" style="background:#f4f7fa; border-radius:10px;">
                     <div>
-                        <div class="small text-muted">Products/Services</div>
+                        <div class="small text-muted">Produk/Layanan</div>
                         <div class="fw-bold" style="font-size:22px;"><?= (int)$productCount ?></div>
                     </div>
                     <i class="bi bi-box-seam" style="font-size:24px; color:#7d8fa1;"></i>
@@ -126,23 +126,23 @@
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center py-3">
-        <span><i class="bi bi-receipt me-2"></i>Recent Invoices</span>
-        <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-right me-1"></i>View All</a>
+        <span><i class="bi bi-receipt me-2"></i>Faktur Terbaru</span>
+        <a href="<?= APP_URL ?>/invoices" class="btn btn-outline-primary btn-sm"><i class="bi bi-arrow-right me-1"></i>Lihat Semua</a>
     </div>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Invoice Number</th>
-                    <th>Client</th>
+                    <th>Nomor Faktur</th>
+                    <th>Klien</th>
                     <th>Total</th>
                     <th>Status</th>
-                    <th>Due Date</th>
+                    <th>Jatuh Tempo</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($recentInvoices)): ?>
-                <tr><td colspan="5" class="text-center text-muted py-4">No invoices yet.</td></tr>
+                <tr><td colspan="5" class="text-center text-muted py-4">Belum ada faktur.</td></tr>
                 <?php else: ?>
                 <?php foreach ($recentInvoices as $inv): ?>
                 <tr style="cursor:pointer" onclick="location.href='<?= APP_URL ?>/invoices/show/<?= $inv['id'] ?>'">
